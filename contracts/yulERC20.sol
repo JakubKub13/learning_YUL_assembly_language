@@ -135,6 +135,45 @@ object "Token" {
                 mstore(0x20, spender)
                 offset := keccak256(0, 0x40)
             }
+
+            /** STORAGE ACCESS */
+            function owner() -> o {
+                o := sload(ownerPos())
+            }
+
+            function totalSupply() -> supply {
+                supply := sload(totalSupplyPos())
+            }
+
+            function mintTokens(amount) {
+                sstore(totalSupplyPos(), safeAdd(totalSupply(), amount))
+            }
+
+            function balanceOf(account) -> bal {
+                bal := sload(accountToStorageOffset(account))
+            }
+
+            function addToBalance(account, amount) {
+                let offset := accountToStorageOffset(account)
+                sstore(offset, safeAdd(sload(offset), amount))
+            }
+
+            function deductFromBalance(account, amount) {
+                let offset := accountToStorageOffset(account)
+                let bal := sload(offset)
+                require(lte(amount, bal))
+                sstore(offset, sub(bal, amount))
+            }
+
+            function allowance(account, spender) -> amount {
+                amount := sload(allowanceStorageOffset(account, spender))
+            }
+
+            function setAllowance(account, spender, amount) {
+                sstore(allowanceStorageOffset(account, spender), amount)
+            }
+
+            
         }
     }
 }
