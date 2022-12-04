@@ -20,8 +20,23 @@ object "Token" {
             case 0x18160ddd /** totalSupply() */ {
                 returnUint(totalSupply())
             }
-            case 0xa9059cbb /** transfer(address, uint256) */ {
+            case 0xa9059cbb /** transfer(address,uint256) */ {
                 transfer(decodeAsAddress(0), decodeAsUnit(1))
+                returnTrue()
+            }
+            case 0x23b872dd /** transferFrom(address,address,uint256) */ {
+                transferFrom(decodeAsAddress(0), decodeAsAddress(1), decodeAsUint(2))
+                returnTrue()
+            }
+            case 0x095ea7b3 /** approve(address,uint256) */ {
+                approve(decodeAsAddress(0), decodeAsUint(1))
+                returnTrue()
+            }
+            case 0xdd62ed3e /** allowance(address,address) */ {
+                returnUint(allowance(decodeAsAddress(0), decodeAsAddress(1)))
+            }
+            case 0x40c10f19 /** mint(address,uint256) */ {
+                mint(decodeAsAddress(0), decodeAsUint(1))
                 returnTrue()
             }
         }
