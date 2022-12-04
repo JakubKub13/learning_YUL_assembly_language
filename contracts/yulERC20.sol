@@ -173,7 +173,12 @@ object "Token" {
                 sstore(allowanceStorageOffset(account, spender), amount)
             }
 
-            
+            function decreaseAllowanceBy(account, spender, amount) {
+                let offset := allowanceStorageOffset(account, spender)
+                let currentAllowance := sload(offset)
+                require(lte(amount, currentAllowance))
+                sstore(offset, sub(currentAllowance, amount))
+            }
         }
     }
 }
