@@ -119,6 +119,22 @@ object "Token" {
                 mstore(0, nonIndexed)
                 log3(0, 0x20, signatureHash, indexed1, indexed2)
             }
+
+            /** STORAGE LAYOUT */
+            function ownerPos() -> p { p := 0 }
+
+            function totalSupplyPos() -> p { p := 1 }
+
+            function accountToStorageOffset(account) -> offset {
+                offset := add(0x1000, account)
+            }
+
+            function allowanceStorageOffset(account, spender) -> offset {
+                offset := accountToStorageOffset(account)
+                mstore(0, offset)
+                mstore(0x20, spender)
+                offset := keccak256(0, 0x40)
+            }
         }
     }
 }
