@@ -103,6 +103,22 @@ object "Token" {
             function returnTrue() {
                 returnUint(1)
             }
+
+            /** EVENTS */
+            function emitTransfer(from, to, amount) {
+                let signatureHash := 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                emitEvent(signatureHash, from, to, amount)
+            }
+
+            function emitApproval(from, spender, amount) {
+                let signatureHash := 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925
+                emitEvent(signatureHash, from, spender, amount)
+            }
+
+            function emitEvent(signatureHash, indexed1, indexed2, nonIndexed) {
+                mstore(0, nonIndexed)
+                log3(0, 0x20, signatureHash, indexed1, indexed2)
+            }
         }
     }
 }
