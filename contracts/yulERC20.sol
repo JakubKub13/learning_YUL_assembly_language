@@ -93,7 +93,16 @@ object "Token" {
                 }
                 v := calldataload(pos)
             }
+
             /** CALLDATA ENCODING FUNCTIONS */
+            function returnUint(v) {
+                mstore(0, v)
+                return(0, 0x20)
+            }
+
+            function returnTrue() {
+                returnUint(1)
+            }
         }
     }
 }
