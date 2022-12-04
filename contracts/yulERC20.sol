@@ -1,4 +1,4 @@
-object "Token" {
+object "ERC20" {
     code {
         // Store creator of the contract in slot zero
         sstore(0, caller())
@@ -178,6 +178,32 @@ object "Token" {
                 let currentAllowance := sload(offset)
                 require(lte(amount, currentAllowance))
                 sstore(offset, sub(currentAllowance, amount))
+            }
+
+            /** UTILS */
+            function lte(a, b) -> r {
+                r := iszero(gt(a, b))
+            }
+
+            function gte(a, b) -> r {
+                r := iszero(lt(a, b))
+            }
+
+            function safeAdd(a, b) -> r {
+                r := add(a, b)
+                if or(lt(r, a), lt(r, b)) { revert(0, 0) }
+            }
+
+            function calledByOwner() -> cbo {
+                cbo := eq(owner(), caller())
+            }
+
+            function revertIfZeroAddress(addr) {
+                require(addr)
+            }
+
+            function require(condition) {
+                if iszero(condition) { revert(0, 0) }
             }
         }
     }
