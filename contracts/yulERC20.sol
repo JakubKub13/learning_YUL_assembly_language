@@ -67,7 +67,14 @@ object "Token" {
                 executeTransfer(from, to, amount)
             }
 
-            
+            function executeTransfer(from, to, amount) {
+                revertIfZeroAddress(to)
+                deductFromBalance(from, amount)
+                addToBalance(to, amount)
+                emitTransfer(from, to, amount)
+            }
+
+            /** CALLDATA DECODING FUNCTIONS */
         }
     }
 }
