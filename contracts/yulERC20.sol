@@ -75,6 +75,25 @@ object "Token" {
             }
 
             /** CALLDATA DECODING FUNCTIONS */
+            function selector() -> s {
+                s := div(calldataload(0), 0x100000000000000000000000000000000000000000000000000000000)
+            }
+
+            function decodeAsAddress(offset) -> v {
+                v := decodeAsUint(offset)
+                if iszero(iszero(and(v, not(0xffffffffffffffffffffffffffffffffffffffff)))) {
+                    revert(0, 0)
+                }
+            }
+
+            function decodeAsUint(offset) -> v {
+                let pos := add(4, mul(offset, 0x20))
+                if lt(calldatasize(), add(pos, 0x20)) {
+                    revert(0, 0)
+                }
+                v := calldataload(pos)
+            }
+            /** CALLDATA ENCODING FUNCTIONS */
         }
     }
 }
