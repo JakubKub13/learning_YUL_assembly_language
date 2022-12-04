@@ -9,7 +9,8 @@ object "Token" {
     }
     object "runtime" {
         code {
-            // Protection against sending ether
+            // Protection against sending ether -> all of the functions are non payable 
+            // it will get callValue and checks if it is 0
             require(iszero(callvalue()))
 
             // Dispatcher
@@ -39,6 +40,34 @@ object "Token" {
                 mint(decodeAsAddress(0), decodeAsUint(1))
                 returnTrue()
             }
+            default {
+                revert(0, 0)
+            }
+
+            function mint(account, amount) {
+                require(calledByOwner())
+
+                mintTokens(amount)
+                addToBalance(account, amount)
+                emitTransfer(0, account, amount)
+            }
+
+            function transfer(to, amount) {
+                executeTransfer(caller(), to, amount)
+            }
+
+            function approve(spender, amount) {
+                revertIfZeroAddress(spender)
+                setAllowance(caller(), spender, amount)
+                emitApproval(caller(), spender, amount)
+            }
+
+            function transferFrom(from, to, amount) {
+                decreaseAllowanceBy(from, caller(), amount)
+                executeTransfer(from, to, amount)
+            }
+
+            
         }
     }
 }
