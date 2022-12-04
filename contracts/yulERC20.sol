@@ -1,4 +1,6 @@
 object "ERC20" {
+// HOW SOLIDITY WORKS UNDER THE HOOD
+// ERC20 contract written in YUL language
     code {
         // Store creator of the contract in slot zero
         sstore(0, caller())
