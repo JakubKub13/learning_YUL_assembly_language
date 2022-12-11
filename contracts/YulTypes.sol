@@ -40,4 +40,5 @@ contract YulTypes {
 
         return x;
     }
+    
 }
